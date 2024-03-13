@@ -124,6 +124,7 @@
 		60FE84C22BA0E1FF006E4FF1 /* Controller */ = {
 			isa = PBXGroup;
 			children = (
+				D9D8B6ED2B7D9FA1006B9BD2 /* DataManager.swift */,
 				60FE84C32BA0E215006E4FF1 /* FireDB.swift */,
 			);
 			path = Controller;
@@ -195,7 +196,6 @@
 			isa = PBXGroup;
 			children = (
 				D9D8B6E32B7D930A006B9BD2 /* Activity.swift */,
-				D9D8B6ED2B7D9FA1006B9BD2 /* DataManager.swift */,
 				D9D8B6E12B7D92D8006B9BD2 /* User.swift */,
 				CE1A09E62B7E6B5300D4AEA5 /* OpenURLProtocol.swift */,
 				CE1A09E82B7E6B8000D4AEA5 /* ViewModel.swift */,
@@ -545,6 +545,8 @@
 				DEVELOPMENT_TEAM = 7PP4AF643A;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_KEY_NSLocationAlwaysAndWhenInUseUsageDescription = "";
+				INFOPLIST_KEY_NSLocationWhenInUseUsageDescription = "";
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
@@ -574,6 +576,8 @@
 				DEVELOPMENT_TEAM = 7PP4AF643A;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_KEY_NSLocationAlwaysAndWhenInUseUsageDescription = "";
+				INFOPLIST_KEY_NSLocationWhenInUseUsageDescription = "";
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;

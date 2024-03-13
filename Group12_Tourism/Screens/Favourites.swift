@@ -16,23 +16,23 @@ struct Favourites: View {
             NavigationLink(destination: loginForm().navigationBarBackButtonHidden(true), tag: 2, selection: self.$linkSelection){}
            
             
-            List {
-                if !self.favouritesList.isEmpty {
-                    ForEach(self.favouritesList) {
-                        activity in
-                        
-                            ActivityRow(activity: activity)
-                        
-                        
-                    }.onDelete(perform: {
-                        indexSet in
-                        self.favouritesList.remove(atOffsets: indexSet)
-                        saveFavouritesListToUD(favouritesList: self.favouritesList)
-                    })
-                }else {
-                    Text("You do not have Favourites yet")
-                }
-            }
+//            List {
+//                if !self.favouritesList.isEmpty {
+//                    ForEach(self.favouritesList) {
+//                        activity in
+//                        
+//                            ActivityRow(activity: activity)
+//                        
+//                        
+//                    }.onDelete(perform: {
+//                        indexSet in
+//                        self.favouritesList.remove(atOffsets: indexSet)
+//                        saveFavouritesListToUD(favouritesList: self.favouritesList)
+//                    })
+//                }else {
+//                    Text("You do not have Favourites yet")
+//                }
+//            }
             .onAppear(){
                 if let data = UserDefaults.standard.data(forKey: "favourites") {
                     do {

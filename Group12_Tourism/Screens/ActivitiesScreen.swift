@@ -10,14 +10,23 @@ import SwiftUI
 struct ActivitiesScreen: View {
     @StateObject private var dataManager = DataManager.shared
     @State private var linkSelection : Int? = nil
-
+    @State private var searchText: String = ""
     var body: some View {
         NavigationStack {
             NavigationLink(destination: Favourites(), tag: 3, selection: self.$linkSelection){}
             NavigationLink(destination: loginForm().navigationBarBackButtonHidden(true), tag: 2, selection: self.$linkSelection){}
-            List(dataManager.activities) { activity in
-                NavigationLink(destination: ActivityDetailsView(activity: activity)) {
-                    ActivityRow(activity: activity)
+            List {
+                TextField("Search by City", text: $searchText)
+                    .textFieldStyle(RoundedBorderTextFieldStyle())
+                    .padding()
+                    .onChange(of: searchText, perform: { newValue in
+                        dataManager.fetchEvents(byCity: newValue)
+                    })
+                
+                ForEach(dataManager.events) { event in
+                    NavigationLink(destination: ActivityDetailsView(event: event)) {
+                        ActivityRow(event: event)
+                    }
                 }
             }
             .background(.white)
@@ -51,19 +60,16 @@ struct ActivitiesScreen: View {
 }
 
 struct ActivityRow: View {
-    var activity: Activity
-    
+    var event: Event
     var body: some View {
         HStack(spacing: 15) {
-            Image(activity.images[0])
-            //Image(activity.imageName)
-                        .resizable()
-                        .frame(width: 75, height: 75) // Adjust size as needed
             
                     VStack(alignment: .leading, spacing: 4) {
-                        Text(activity.name)
-                        Text(String(format: "$%.2f/Person", activity.price))
-                            .foregroundColor(.secondary)
+                        Text(event.short_title)
+                            .font(.body)
+                        Text("\(event.venue.city)-\(event.venue.address)")
+                            .font(.subheadline)
+                            .foregroundColor(.gray)
                     }
                     
                     Spacer()

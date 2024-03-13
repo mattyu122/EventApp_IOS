@@ -8,7 +8,8 @@
 import SwiftUI
 
 struct ActivityDetailsView: View {
-    var activity: Activity
+//    var activity: Activity
+    var event: Event
     @State private var rating :Int = 1
     @ObservedObject var viewModel: ViewModel = ViewModel()
     @State private var linkSelection : Int? = nil
@@ -19,39 +20,39 @@ struct ActivityDetailsView: View {
     var body: some View {
         NavigationLink(destination: loginForm().navigationBarBackButtonHidden(true), tag: 2, selection: self.$linkSelection){}
         ScrollView (.horizontal, showsIndicators: false){
-            HStack(alignment: .top, spacing: 0){
-                ForEach(self.activity.images, id: \.self) {
-                    image in
-                    Image(image).resizable().aspectRatio(contentMode: .fill)
-                }
-            }//HStack
-            .frame(height: 200 )
-            Spacer()
+//            HStack(alignment: .top, spacing: 0){
+//                ForEach(self.activity.images, id: \.self) {
+//                    image in
+//                    Image(image).resizable().aspectRatio(contentMode: .fill)
+//                }
+//            }//HStack
+//            .frame(height: 200 )
+//            Spacer()
         }
         .frame(height: 200 )
         Spacer()
         VStack(alignment: .leading){
-            Text(activity.name).font(.title)
-            Text(activity.description).font(.callout)
-            
-            Text(String(format: "$%.2f", activity.price)).bold()
+//            Text(activity.name).font(.title)
+//            Text(activity.description).font(.callout)
+//            
+//            Text(String(format: "$%.2f", activity.price)).bold()
             HStack{
                 
                 Text("Tourists Rating:");
                 StarRating(rating: $rating)
             }
             Spacer().frame(height: 100)
-            Text("Host: \(activity.hostedBy)")
-            let numberString = activity.phoneNumber
+//            Text("Host: \(activity.hostedBy)")
+//            let numberString = activity.phoneNumber
         
             HStack{
                 Text("Contact: ")
             
-                Button(action: {
-                    viewModel.callNumber(phoneNumber: numberString)
-                   }) {
-                   Text(numberString)
-                }
+//                Button(action: {
+//                    viewModel.callNumber(phoneNumber: numberString)
+//                   }) {
+//                   Text(numberString)
+//                }
             }
 //                Spacer()
             
@@ -61,7 +62,7 @@ struct ActivityDetailsView: View {
         .frame(maxWidth: 280)
         
         .onAppear(){
-            self.rating = activity.rating
+//            self.rating = activity.rating
             if let data = UserDefaults.standard.data(forKey: "favourites") {
                 do {
                     let decoder = JSONDecoder()
@@ -74,18 +75,18 @@ struct ActivityDetailsView: View {
         }
 //        .padding()
         HStack (spacing: 50) {
-            ShareLink(item: "\(activity.name)\n$\(activity.price)"){
-                Label("Share", systemImage: "square.and.arrow.up").foregroundColor(.appStyle)
-            }
-            Button{
-                addToFavourite(currActivity: activity)
-            }label: {
-                Image(systemName: "heart"); Text("Favourite")
-            }
-            .alert(isPresented: self.$showAlert){
-                Alert(title: Text("\(self.alertTitle)"), message: nil, dismissButton: .default(Text("Dismiss")))
-            }
-            .foregroundColor(.appStyle)
+//            ShareLink(item: "\(activity.name)\n$\(activity.price)"){
+//                Label("Share", systemImage: "square.and.arrow.up").foregroundColor(.appStyle)
+//            }
+//            Button{
+//                addToFavourite(currActivity: activity)
+//            }label: {
+//                Image(systemName: "heart"); Text("Favourite")
+//            }
+//            .alert(isPresented: self.$showAlert){
+//                Alert(title: Text("\(self.alertTitle)"), message: nil, dismissButton: .default(Text("Dismiss")))
+//            }
+//            .foregroundColor(.appStyle)
         }
         
         .toolbar{
@@ -123,6 +124,6 @@ struct ActivityDetailsView: View {
     }
 }
 
-#Preview {
-    ActivityDetailsView(activity: Activity(), viewModel: ViewModel())
-}
+//#Preview {
+//    ActivityDetailsView(event: Event(), viewModel: ViewModel())
+//}
