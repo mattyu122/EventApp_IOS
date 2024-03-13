@@ -16,17 +16,17 @@ class UserManager: ObservableObject{
     func addEventForUser(event: Event, currentUser: User) {
         let userRef = db.collection("users").document(currentUser.email)
 
-        let eventData = [
-            "id": event.id,
-            "title": event.short_title,
-            "performer": event.performers.first?.name ?? "N/A",
-            "date": event.datetime_local,
-            "venueName": event.venue.name,
-            "venueAddress": event.venue.address,
-            "venueCity": event.venue.city,
-            "price": event.stats?.average_price ?? 0
-            // Add other event details as needed
-        ] as [String : Any]
+//        let eventData = [
+//            "id": event.id,
+//            "title": event.short_title,
+//            "performer": event.performers.first?.name ?? "N/A",
+//            "date": event.datetime_local,
+//            "venueName": event.venue.name,
+//            "venueAddress": event.venue.address,
+//            "venueCity": event.venue.city,
+//            "price": event.stats?.average_price ?? 0
+//            // Add other event details as needed
+//        ] as [String : Any]
         
         userRef.updateData([
             "eventsAttending": FieldValue.arrayUnion([event.id]),
