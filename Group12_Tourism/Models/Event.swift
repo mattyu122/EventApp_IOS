@@ -16,10 +16,12 @@ struct Event: Codable, Identifiable {
     // Add other fields as needed
     var popularity: Double?
     var is_open: Bool?
+    var stats: Stats?
     // Include any other fields you might need from the JSON
 }
 
-struct Venue: Codable {
+struct Venue: Codable, Identifiable {
+    let id: UUID = UUID() // Generates a unique identifier
     var state: String
     var name_v2: String
     var postal_code: String
@@ -46,6 +48,9 @@ struct Performer: Codable {
     // Add fields for other properties of Performer if needed
 }
 
-// Note: This is structured based on the JSON snippet you provided.
-// If there are additional fields in the full JSON response not included here,
-// you should add them to the corresponding structs.
+struct Stats: Codable{
+    var listing_count: Int?
+    var average_price: Int?
+    var lowest_price: Int?
+    var highest_price: Int?
+}

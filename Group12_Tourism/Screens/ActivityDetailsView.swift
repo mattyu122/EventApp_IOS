@@ -1,129 +1,52 @@
-//
-//  ActivityDetailsView.swift
-//  Tourist_Group12
-//
-//  Created by Arogs on 2/13/24.
-//
-
 import SwiftUI
+import MapKit
 
 struct ActivityDetailsView: View {
-//    var activity: Activity
+    @StateObject private var dataManager = DataManager.shared
+    @StateObject private var fireDB = FireDB.shared
+    @EnvironmentObject var currentUser: User
     var event: Event
-    @State private var rating :Int = 1
-    @ObservedObject var viewModel: ViewModel = ViewModel()
-    @State private var linkSelection : Int? = nil
-    @State private var favouritesList : [Activity] = []
-    @State private var showAlert : Bool = false
-    @State private var alertTitle : String = ""
+    @State private var userAttending = false
+    // Initially set the region to a default value or event's location
+    @State private var region = MKCoordinateRegion(
+        center: CLLocationCoordinate2D(latitude: 34.0522, longitude: -118.2437),
+        span: MKCoordinateSpan(latitudeDelta: 0.05, longitudeDelta: 0.05)
+    )
 
     var body: some View {
-        NavigationLink(destination: loginForm().navigationBarBackButtonHidden(true), tag: 2, selection: self.$linkSelection){}
-        ScrollView (.horizontal, showsIndicators: false){
-//            HStack(alignment: .top, spacing: 0){
-//                ForEach(self.activity.images, id: \.self) {
-//                    image in
-//                    Image(image).resizable().aspectRatio(contentMode: .fill)
-//                }
-//            }//HStack
-//            .frame(height: 200 )
-//            Spacer()
-        }
-        .frame(height: 200 )
-        Spacer()
-        VStack(alignment: .leading){
-//            Text(activity.name).font(.title)
-//            Text(activity.description).font(.callout)
-//            
-//            Text(String(format: "$%.2f", activity.price)).bold()
-            HStack{
-                
-                Text("Tourists Rating:");
-                StarRating(rating: $rating)
+        ScrollView {
+            Map(coordinateRegion: $region,
+                annotationItems: [event.venue]) { venue in
+                MapMarker(coordinate: CLLocationCoordinate2D(latitude: venue.location.lat, longitude: venue.location.lon), tint: .blue)
             }
-            Spacer().frame(height: 100)
-//            Text("Host: \(activity.hostedBy)")
-//            let numberString = activity.phoneNumber
-        
-            HStack{
-                Text("Contact: ")
-            
-//                Button(action: {
-//                    viewModel.callNumber(phoneNumber: numberString)
-//                   }) {
-//                   Text(numberString)
-//                }
+            .frame(height: 300)
+            .onAppear {
+                region.center = dataManager.currentLocation
             }
-//                Spacer()
-            
-            Spacer()
-        }//VStack MAin
-        .position(x:120, y:250)
-        .frame(maxWidth: 280)
-        
-        .onAppear(){
-//            self.rating = activity.rating
-            if let data = UserDefaults.standard.data(forKey: "favourites") {
-                do {
-                    let decoder = JSONDecoder()
-                    let favouriteActivites = try decoder.decode([Activity].self, from: data)
-                    self.favouritesList = favouriteActivites
-                } catch {
-                    print("Unable to get favourites")
-                }
-            }
-        }
-//        .padding()
-        HStack (spacing: 50) {
-//            ShareLink(item: "\(activity.name)\n$\(activity.price)"){
-//                Label("Share", systemImage: "square.and.arrow.up").foregroundColor(.appStyle)
-//            }
-//            Button{
-//                addToFavourite(currActivity: activity)
-//            }label: {
-//                Image(systemName: "heart"); Text("Favourite")
-//            }
-//            .alert(isPresented: self.$showAlert){
-//                Alert(title: Text("\(self.alertTitle)"), message: nil, dismissButton: .default(Text("Dismiss")))
-//            }
-//            .foregroundColor(.appStyle)
-        }
-        
-        .toolbar{
-            ToolbarItem(placement: .navigationBarTrailing) {
-                Menu{
-                    Button{
-                            logout()
-                            self.linkSelection = 2
-                        } label:{
-                            Text("Logout")
+
+            VStack(alignment: .leading, spacing: 10) {
+                Text(event.short_title)
+                    .font(.title)
+                Text("Performer: \(event.performers.first?.name ?? "N/A")")
+                Text("Date: \(event.datetime_local)")
+                Text("Venue: \(event.venue.name), \(event.venue.address), \(event.venue.city)")
+                // Add pricing details if available
+                Text("Price: \(event.stats?.average_price != nil ? String(event.stats!.average_price!) : "N/A")")
+                Toggle("Attend this event", isOn: $userAttending)
+                    .toggleStyle(SwitchToggleStyle(tint: .green))
+                    .onChange(of: userAttending) { newValue in
+                        if newValue {
+                            // Replace "userId" with the actual user identifier
+                            fireDB.addEventForUser(event: event, currentUser: currentUser)
                         }
-                        
-                    }//Menu
-                    label: {
-                        Image(systemName: "list.bullet")
+                        // Add logic for when a user is no longer attending an event if necessary
                     }
-                }
-        }
-        
-    }
-    
-    func addToFavourite(currActivity: Activity) {
-        for activity in favouritesList {
-            if activity.id == currActivity.id {
-                self.alertTitle = "Activity already added"
-                self.showAlert = true
-                return
+
+                // Implement saving functionality or API call to mark attendance
             }
+            .padding()
         }
-        
-        favouritesList.append(currActivity)
-        saveFavouritesListToUD(favouritesList: favouritesList)
-        self.alertTitle = "Successfully added"
-        self.showAlert = true
+        .navigationTitle("Event Details")
+        .navigationBarTitleDisplayMode(.inline)
     }
 }
-
-//#Preview {
-//    ActivityDetailsView(event: Event(), viewModel: ViewModel())
-//}

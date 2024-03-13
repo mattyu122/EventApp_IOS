@@ -7,13 +7,18 @@
 
 import Foundation
 class User :ObservableObject{
-    var email: String
-    var password: String
-    var favorites: [Activity]
-    
-    init(email: String, password: String) {
+    @Published var username: String
+    @Published var email: String
+    @Published var password: String
+    @Published var favorites: [Activity]
+    @Published var attending: [String]
+    @Published var friends: [String]
+    init(email: String, password: String, username: String) {
         self.email = email
         self.password = password
+        self.username = username
         self.favorites = []
+        self.attending = []
+        self.friends = []
     }
 }

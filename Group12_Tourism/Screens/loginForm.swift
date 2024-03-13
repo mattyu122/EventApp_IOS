@@ -15,8 +15,8 @@ struct loginForm: View {
     @State private var rememberMe = false //  state for Remember Me checkbox
     
     let users: [User] = [
-        User(email: "user1", password: "123"),
-        User(email: "user2", password: "321")
+        User(email: "user1", password: "123", username: "user1" ),
+        User(email: "user2", password: "321", username: "user2")
     ]
 
     var body: some View {
@@ -92,6 +92,7 @@ struct loginForm: View {
                                     .cornerRadius(10)
 
                 NavigationLink(destination: ActivitiesScreen()
+                    .environmentObject(users.first!)
                     .navigationBarBackButtonHidden(true), isActive: $isLoggedIn) {
                     EmptyView()
                 } .navigationTitle("")
