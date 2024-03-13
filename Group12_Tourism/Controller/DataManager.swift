@@ -104,6 +104,54 @@ class DataManager: NSObject, ObservableObject {
             // Start the data task
             task.resume()
     }
+    
+    public func fetchEvent(byId id: String, completion: @escaping (Result<Event, Error>) -> Void){
+        let urlString = "https://api.seatgeek.com/2/events/\(id)?client_id=NDAzNjYzNjN8MTcxMDI3MTk5OS4xNzI2OTY2"
+        
+        
+        // Proceed with creating a URLRequest and fetching the data...
+        guard let url = URL(string: urlString) else {
+                print("Invalid URL")
+                return
+            }
+
+            // Create a URL session data task to fetch the data
+            let task = URLSession.shared.dataTask(with: url) { [weak self] data, response, error in
+                // Handle errors
+                if let error = error {
+                    print("Error fetching events: \(error.localizedDescription)")
+                    return
+                }
+
+                // Check for valid response and data
+                guard let httpResponse = response as? HTTPURLResponse, httpResponse.statusCode == 200 else {
+                    print("Invalid response")
+                    print("")
+                    return
+                }
+
+                guard let data = data else {
+                    print("No data received")
+                    return
+                }
+
+                // Decode the JSON data into our model
+                do {
+                    let decoder = JSONDecoder()
+
+                    let eventResponse = try decoder.decode(Event.self, from: data)
+                    
+                    completion(.success(eventResponse))
+                } catch {
+                    print("Error decoding data: \(error.localizedDescription)")
+                    completion(.failure(error))
+
+                }
+            }
+
+            // Start the data task
+            task.resume()
+    }
 }
 
 extension DataManager: CLLocationManagerDelegate {
