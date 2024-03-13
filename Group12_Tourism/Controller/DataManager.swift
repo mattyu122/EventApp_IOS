@@ -105,7 +105,7 @@ class DataManager: NSObject, ObservableObject {
             task.resume()
     }
     
-    public func fetchEvent(byId id: String, completion: @escaping (Result<Event, Error>) -> Void){
+    public func fetchEvent(byId id: Int, completion: @escaping (Result<Event, Error>) -> Void){
         let urlString = "https://api.seatgeek.com/2/events/\(id)?client_id=NDAzNjYzNjN8MTcxMDI3MTk5OS4xNzI2OTY2"
         
         

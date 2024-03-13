@@ -3,7 +3,7 @@ import MapKit
 
 struct ActivityDetailsView: View {
     @StateObject private var dataManager = DataManager.shared
-    @StateObject private var fireDB = FireDB.shared
+    @StateObject private var userManager = UserManager.shared
     @EnvironmentObject var currentUser: User
     var event: Event
     @State private var userAttending = false
@@ -22,6 +22,18 @@ struct ActivityDetailsView: View {
             .frame(height: 300)
             .onAppear {
                 region.center = dataManager.currentLocation
+                
+                dataManager.fetchEvent(byId: event.id){
+                    result in
+                    switch result {
+                    case . success(let event):
+                        print("Fetched event by ID: \(event.short_title)")
+                        
+                    case .failure(let error):
+                        print("Error fetching event: \(error)")
+                    }
+                                        
+                }
             }
 
             VStack(alignment: .leading, spacing: 10) {
@@ -37,7 +49,7 @@ struct ActivityDetailsView: View {
                     .onChange(of: userAttending) { newValue in
                         if newValue {
                             // Replace "userId" with the actual user identifier
-                            fireDB.addEventForUser(event: event, currentUser: currentUser)
+                            userManager.addEventForUser(event: event, currentUser: currentUser)
                         }
                         // Add logic for when a user is no longer attending an event if necessary
                     }
