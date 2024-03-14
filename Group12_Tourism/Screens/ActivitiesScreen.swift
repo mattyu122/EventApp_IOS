@@ -9,6 +9,7 @@ import SwiftUI
 
 struct ActivitiesScreen: View {
     @StateObject private var dataManager = DataManager.shared
+    @EnvironmentObject var currentUser: User
     @State private var linkSelection : Int? = nil
     @State private var searchText: String = ""
     var body: some View {

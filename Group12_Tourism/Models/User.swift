@@ -11,7 +11,7 @@ class User :ObservableObject{
     @Published var email: String
     @Published var password: String
     @Published var favorites: [Activity]
-    @Published var attending: [String]
+    @Published var attending: [Int]
     @Published var friends: [String]
     init(email: String, password: String, username: String) {
         self.email = email

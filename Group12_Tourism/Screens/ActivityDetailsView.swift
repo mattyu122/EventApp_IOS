@@ -21,6 +21,7 @@ struct ActivityDetailsView: View {
             }
             .frame(height: 300)
             .onAppear {
+                userAttending = currentUser.attending.contains(where: {$0 == event.id})
                 region.center = CLLocationCoordinate2D(latitude: self.event.venue.location.lat, longitude: self.event.venue.location.lon)
                 
                 dataManager.fetchEvent(byId: event.id){
@@ -49,8 +50,11 @@ struct ActivityDetailsView: View {
                     .onChange(of: userAttending) { newValue in
                         if newValue {
                             // Replace "userId" with the actual user identifier
-                            userManager.addEventForUser(event: event, currentUser: currentUser)
+                            if !currentUser.attending.contains(where: {$0 == event.id}){
+                                userManager.addEventForUser(event: event, currentUser: currentUser)
+                            }
                         }
+                        userAttending = newValue
                         // Add logic for when a user is no longer attending an event if necessary
                     }
 
