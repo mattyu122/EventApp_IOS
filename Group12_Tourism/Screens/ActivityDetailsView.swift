@@ -17,11 +17,11 @@ struct ActivityDetailsView: View {
         ScrollView {
             Map(coordinateRegion: $region,
                 annotationItems: [event.venue]) { venue in
-                MapMarker(coordinate: CLLocationCoordinate2D(latitude: venue.location.lat, longitude: venue.location.lon), tint: .blue)
+                MapMarker(coordinate: CLLocationCoordinate2D(latitude: venue.location.lat, longitude: venue.location.lon), tint: .red)
             }
             .frame(height: 300)
             .onAppear {
-                region.center = dataManager.currentLocation
+                region.center = CLLocationCoordinate2D(latitude: self.event.venue.location.lat, longitude: self.event.venue.location.lon)
                 
                 dataManager.fetchEvent(byId: event.id){
                     result in
@@ -43,7 +43,7 @@ struct ActivityDetailsView: View {
                 Text("Date: \(event.datetime_local)")
                 Text("Venue: \(event.venue.name), \(event.venue.address), \(event.venue.city)")
                 // Add pricing details if available
-                Text("Price: \(event.stats?.average_price != nil ? String(event.stats!.average_price!) : "N/A")")
+                Text("Price: \(event.stats?.average_price != nil ? "$"+String(event.stats!.average_price!) : "N/A")")
                 Toggle("Attend this event", isOn: $userAttending)
                     .toggleStyle(SwitchToggleStyle(tint: .green))
                     .onChange(of: userAttending) { newValue in
